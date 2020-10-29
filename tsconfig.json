@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "outDir": "./build/",
+
+    "noImplicitAny": false,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
+
+    "module": "commonjs",
+    "target": "esnext",
+    "allowJs": true,
+    "sourceMap": true,
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "lib": ["esnext"],
+    "experimentalDecorators": true,
+    "skipDefaultLibCheck": true,
+    "skipLibCheck": true,
+
+    "baseUrl": "./"
+  },
+  "exclude": ["node_modules", "build"],
+  "include": ["src/**/*"]
+}
