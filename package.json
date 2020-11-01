@@ -1,16 +1,35 @@
 {
   "name": "@wexond/electron-rpc",
   "version": "1.0.0",
+  "description": "A better way to communicate between processes in an Electron app",
+  "keywords": [
+    "electron",
+    "typescript",
+    "ipc",
+    "grpc",
+    "main",
+    "renderer"
+  ],
   "main": "build/index.js",
   "typings": "build/index.d.ts",
   "files": [
     "build"
   ],
+  "homepage": "https://github.com/wexond/electron-rpc#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wexond/electron-rpc.git"
+  },
   "scripts": {
-    "build:dev": "tsc --watch"
+    "build:dev": "tsc --watch",
+    "build:prod": "npm run clean && tsc",
+    "clean": "rimraf build",
+    "prepublishOnly": "npm run build:prod"
   },
   "devDependencies": {
     "@types/node": "14.14.6",
+    "electron": "^10.1.5",
+    "rimraf": "^3.0.2",
     "typescript": "4.0.5"
   },
   "peerDependencies": {
