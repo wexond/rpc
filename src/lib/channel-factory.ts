@@ -9,7 +9,19 @@ export class ChannelFactory {
   public static create<T>(name?: string, manifest?: Manifest<T>) {
     return {
       createClient: (): T => {
-        return {} as T;
+        const proxy = new Proxy(
+          {},
+          {
+            get: (obj, prop) => {
+              return (...args) => {
+                console.log(obj, prop, args);
+                return 2;
+              };
+            },
+          },
+        );
+
+        return proxy as T;
       },
       createServer: (instance: Receiver<T>) => {
         // const ctx: 'main' | 'renderer'
