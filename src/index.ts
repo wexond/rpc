@@ -1,2 +1,3 @@
 export { IpcEvent, IpcHandler } from './interfaces';
-export * from './channel-factory';
+export * from './main-to-renderer';
+export * from './renderer-to-main';
