@@ -1,11 +1,10 @@
-import { ChannelFactory } from 'lib/channel-factory';
+import { ipcRendererToMain } from 'lib/channel-factory';
 
 export interface TabService {
   show(id: number): boolean;
+  getTabId(): number;
 }
 
-const tabChannel = ChannelFactory.create<TabService>('tabs', {
-  show: 'sync',
-});
+const tabChannel = ipcRendererToMain<TabService>('tabs', ['getTabId']);
 
 export { tabChannel };

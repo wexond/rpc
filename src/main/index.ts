@@ -1,5 +1,8 @@
 import { app, BrowserWindow, ipcMain } from 'electron';
 import { resolve } from 'path';
+import { IpcHandler } from '~/lib/receiver';
+import { tabChannel, TabService } from '~/shared/tabs';
+import { uiChannel } from '~/shared/ui';
 
 const createWindow = () => {
   const window = new BrowserWindow({
@@ -25,7 +28,27 @@ const createWindow = () => {
   return window;
 };
 
+class TabHandler implements IpcHandler<TabService> {
+  show(id: number): boolean {
+    return true;
+  }
+  getTabId(): number {
+    return -1;
+  }
+}
+
 (async () => {
   await app.whenReady();
-  createWindow();
+
+  const handler = new TabHandler();
+  tabChannel.registerHandler(handler);
+
+  const window = createWindow();
+
+  window.webContents.on('dom-ready', async () => {
+    console.log('UI Service')
+    const uiService = uiChannel.createInvoker(window.webContents);
+    console.log(await uiService.showButton());
+  });
+
 })();

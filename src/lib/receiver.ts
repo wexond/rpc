@@ -1,1 +1,1 @@
-export type Receiver<T> = T;
+export type IpcHandler<T> = T;
