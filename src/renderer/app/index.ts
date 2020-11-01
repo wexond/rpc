@@ -2,7 +2,6 @@ import { Receiver } from '~/lib/receiver';
 import { tabChannel, TabService } from '~/shared/tabs';
 
 class TabReceiver implements Receiver<TabService> {
-  @sync
   show(id: number): boolean {
     console.log('tab receiver - show', id);
     return true;
