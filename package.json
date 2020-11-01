@@ -1,7 +1,7 @@
 {
   "name": "@wexond/electron-rpc",
   "version": "1.0.0",
-  "description": "A better way to communicate between processes in an Electron app",
+  "description": "A better way to communicate between processes in Electron apps",
   "keywords": [
     "electron",
     "typescript",
