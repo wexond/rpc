@@ -1,8 +1,11 @@
 {
   "name": "@wexond/electron-rpc",
   "version": "1.0.0",
-  "main": "build",
-  "typings": "build",
+  "main": "build/index.js",
+  "typings": "build/index.d.ts",
+  "files": [
+    "build"
+  ],
   "scripts": {
     "build:dev": "tsc --watch"
   },
