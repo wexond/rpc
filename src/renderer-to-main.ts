@@ -1,25 +1,14 @@
-import { IpcMain, IpcRenderer } from 'electron';
+import { IpcRenderer } from 'electron';
 
-import { Channel } from './channel';
 import { IpcScaffold, IpcHandler } from './interfaces';
+import { IpcBase } from './ipc-base';
+import { getGlobalIPC } from './utils';
 
-let globalIpcRenderer: IpcRenderer;
-let globalIpcMain: IpcMain;
+const { globalIpcMain, globalIpcRenderer } = getGlobalIPC();
 
-if (require) {
-  const { ipcRenderer, ipcMain } = require('electron');
-  globalIpcRenderer = ipcRenderer;
-  globalIpcMain = ipcMain;
-}
-
-export class IpcRendererToMain<T extends IpcScaffold<T>> {
-  private readonly channel: Channel<T>;
-
-  constructor(
-    public readonly name: string,
-    public readonly syncFunctions?: (keyof T)[],
-  ) {
-    this.channel = new Channel(name);
+export class IpcRendererToMain<T extends IpcScaffold<T>> extends IpcBase<T> {
+  constructor(name: string, private readonly syncFunctions?: (keyof T)[]) {
+    super(name);
   }
 
   public createInvoker(ipcRenderer?: IpcRenderer) {

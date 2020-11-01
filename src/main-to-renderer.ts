@@ -1,25 +1,15 @@
-import { IpcMain, IpcRenderer, WebContents } from 'electron';
+import { WebContents } from 'electron';
 
-import { Channel } from './channel';
 import { IpcScaffold, IpcHandler } from './interfaces';
+import { IpcBase } from './ipc-base';
+import { getGlobalIPC } from './utils';
 
-let globalIpcRenderer: IpcRenderer;
-let globalIpcMain: IpcMain;
+const { globalIpcMain, globalIpcRenderer } = getGlobalIPC();
 
-if (require) {
-  const { ipcRenderer, ipcMain } = require('electron');
-  globalIpcRenderer = ipcRenderer;
-  globalIpcMain = ipcMain;
-}
-
-export class IpcMainToRenderer<T extends IpcScaffold<T>> {
-  private readonly channel: Channel<T>;
-
-  constructor(public readonly name: string) {
-    this.channel = new Channel(name);
-  }
-
+export class IpcMainToRenderer<T extends IpcScaffold<T>> extends IpcBase<T> {
   public createInvoker(webContents: WebContents) {
+    if (!globalIpcMain) throw Error('Not in the main process.');
+
     if (!webContents?.send) {
       throw new Error('Given webContents is invalid.');
     }
