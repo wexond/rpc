@@ -16,6 +16,6 @@ export type IpcHandlerMethod<T extends AnyFunction> = (
 ) => ReturnType<T>;
 
 export interface IpcEvent {
-  channel: string;
+  channel?: string;
   webContents?: WebContents;
 }

@@ -1,4 +1,4 @@
-import { IpcScaffold } from './interfaces';
+import { IpcEvent, IpcScaffold } from './interfaces';
 
 export class Channel<T extends IpcScaffold<T>> {
   constructor(public readonly name) {}
@@ -23,8 +23,13 @@ export class Channel<T extends IpcScaffold<T>> {
 
   public createHandler = <K>(obj: K) => (
     functionName: string,
+    e: Omit<IpcEvent, 'channel'>,
     ...args: any[]
   ) => {
-    return obj[functionName](...args);
+    return obj[functionName](
+      e,
+      { ...e, channel: this.name } as IpcEvent,
+      ...args,
+    );
   };
 }

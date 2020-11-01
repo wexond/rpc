@@ -48,12 +48,16 @@ export class IpcRendererToMain<T extends IpcScaffold<T>> extends IpcBase<T> {
 
     // Handle synchronous messages.
     globalIpcMain.on(this.name, (e, functionName: string, ...args) => {
-      e.returnValue = messageHandler(functionName, ...args);
+      e.returnValue = messageHandler(
+        functionName,
+        { webContents: e.sender },
+        ...args,
+      );
     });
 
     // Handle asynchronous messages.
     globalIpcMain.handle(this.name, (e, functionName: string, ...args) => {
-      return messageHandler(functionName, ...args);
+      return messageHandler(functionName, { webContents: e.sender }, ...args);
     });
   }
 }

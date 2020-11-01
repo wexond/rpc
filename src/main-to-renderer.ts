@@ -40,8 +40,9 @@ export class IpcMainToRenderer<T extends IpcScaffold<T>> extends IpcBase<T> {
     globalIpcRenderer.on(
       this.name,
       async (e, functionName: string, id: string, ...args) => {
-        let ret = Promise.resolve(messageHandler(functionName, ...args));
-        globalIpcRenderer.send(`${this.name}${functionName}${id}`, await ret);
+        let res = Promise.resolve(messageHandler(functionName, {}, ...args));
+
+        globalIpcRenderer.send(`${this.name}${functionName}${id}`, await res);
       },
     );
   }
