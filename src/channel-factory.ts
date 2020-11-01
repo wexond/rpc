@@ -1,6 +1,6 @@
 import { IpcRenderer, IpcMain, WebContents } from 'electron';
 
-import { IpcHandler } from './receiver';
+import { IpcHandler, IpcScaffold } from './interfaces';
 
 let globalIpcRenderer: IpcRenderer;
 let globalIpcMain: IpcMain;
@@ -39,7 +39,7 @@ export function createChannel<T>(name: string) {
   };
 }
 
-export function ipcRendererToMain<T>(
+export function ipcRendererToMain<T extends IpcScaffold<T>>(
   name: string,
   syncFunctions?: (keyof T)[],
 ) {
@@ -93,7 +93,7 @@ export function ipcRendererToMain<T>(
   };
 }
 
-export function ipcMainToRenderer<T>(name: string) {
+export function ipcMainToRenderer<T extends IpcScaffold<T>>(name: string) {
   const channel = createChannel<T>(name);
 
   return {
