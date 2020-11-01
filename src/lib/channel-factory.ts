@@ -1,4 +1,4 @@
-import { ipcMain, webContents } from 'electron';
+// import { ipcMain, webContents } from 'electron';
 import { Receiver } from './receiver';
 
 export class ChannelFactory {
@@ -8,11 +8,10 @@ export class ChannelFactory {
         return {} as T;
       },
       createServer: (instance: Receiver<T>) => {
-        ipcMain.on('channel', (e) => {
-          e.returnValue = 'chuj';
-        });
-
-        ipcMain.handle('cnahell', () => {});
+        // ipcMain.on('channel', (e) => {
+        //   e.returnValue = 'chuj';
+        // });
+        // ipcMain.handle('cnahell', () => {});
       },
     };
   }
