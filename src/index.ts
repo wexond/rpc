@@ -1,1 +1,2 @@
-console.log('test');
+export * from './channel-factory';
+export * from './receiver';

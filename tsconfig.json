@@ -1,31 +1,22 @@
 {
   "compilerOptions": {
-    "outDir": "./build/",
+    "outDir": "./build",
+
     "noImplicitAny": false,
     "noImplicitReturns": true,
     "noImplicitThis": true,
     "strictNullChecks": true,
     "alwaysStrict": true,
+
     "skipLibCheck": true,
-    "module": "None",
-    "target": "es2017",
-    "jsx": "react",
-    "allowJs": true,
     "sourceMap": true,
-    "moduleResolution": "node",
-    "allowSyntheticDefaultImports": true,
-    "lib": ["dom", "esnext"],
-    "experimentalDecorators": true,
-    "baseUrl": "./",
-    "paths": {
-      "~/*": ["./src/*"],
-      "lib/*": ["./src/lib/*"]
-    }
+    "declaration": true,
+
+    "module": "commonjs",
+    "target": "esnext",
+    "lib": ["esnext"],
+
+    "baseUrl": "./"
   },
-  "include": [
-    "./src/**/*.ts",
-    "./src/**/*.tsx",
-    "./stories/**/*.tsx",
-    "./stories/**/*.ts"
-  ]
+  "include": ["./src"]
 }
