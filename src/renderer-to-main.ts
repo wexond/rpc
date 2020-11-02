@@ -2,9 +2,9 @@ import { IpcRenderer } from 'electron';
 
 import { IpcScaffold, IpcHandler } from './interfaces';
 import { IpcBase } from './ipc-base';
-import { getGlobalIPC } from './utils';
+import { getIPCContexts } from './utils/electron';
 
-const { globalIpcMain, globalIpcRenderer } = getGlobalIPC();
+const { ipcMain, ipcRenderer: globalIpcRenderer } = getIPCContexts();
 
 export class IpcRendererToMain<T extends IpcScaffold<T>> extends IpcBase<T> {
   constructor(name: string, private readonly syncFunctions?: (keyof T)[]) {
@@ -42,12 +42,12 @@ export class IpcRendererToMain<T extends IpcScaffold<T>> extends IpcBase<T> {
   }
 
   public registerHandler(handler: IpcHandler<T>) {
-    if (!globalIpcMain) throw Error('Not in the main process.');
+    if (!ipcMain) throw Error('Not in the main process.');
 
     const messageHandler = this.channel.createHandler<IpcHandler<T>>(handler);
 
     // Handle synchronous messages.
-    globalIpcMain.on(this.name, (e, functionName: string, ...args) => {
+    ipcMain.on(this.name, (e, functionName: string, ...args) => {
       e.returnValue = messageHandler(
         functionName,
         { webContents: e.sender },
@@ -56,7 +56,7 @@ export class IpcRendererToMain<T extends IpcScaffold<T>> extends IpcBase<T> {
     });
 
     // Handle asynchronous messages.
-    globalIpcMain.handle(this.name, (e, functionName: string, ...args) => {
+    ipcMain.handle(this.name, (e, functionName: string, ...args) => {
       return messageHandler(functionName, { webContents: e.sender }, ...args);
     });
   }

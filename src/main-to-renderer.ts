@@ -2,13 +2,13 @@ import { WebContents } from 'electron';
 
 import { IpcScaffold, IpcHandler } from './interfaces';
 import { IpcBase } from './ipc-base';
-import { getGlobalIPC } from './utils';
+import { getIPCContexts } from './utils/electron';
 
-const { globalIpcMain, globalIpcRenderer } = getGlobalIPC();
+const { ipcMain, ipcRenderer } = getIPCContexts();
 
 export class IpcMainToRenderer<T extends IpcScaffold<T>> extends IpcBase<T> {
   public createInvoker(webContents: WebContents) {
-    if (!globalIpcMain) throw Error('Not in the main process.');
+    if (!ipcMain) throw Error('Not in the main process.');
 
     if (!webContents?.send) {
       throw new Error('Given webContents is invalid.');
@@ -18,7 +18,7 @@ export class IpcMainToRenderer<T extends IpcScaffold<T>> extends IpcBase<T> {
       (channelName, functionName) => (...args: any[]) => {
         return new Promise((resolve, reject) => {
           const id = '_' + Math.random().toString(36).substr(2, 9);
-          globalIpcMain.once(
+          ipcMain.once(
             `${this.name}${functionName}${id}`,
             (e, returnValue) => {
               resolve(returnValue);
@@ -32,17 +32,17 @@ export class IpcMainToRenderer<T extends IpcScaffold<T>> extends IpcBase<T> {
   }
 
   public registerHandler(handler: IpcHandler<T>) {
-    if (!globalIpcRenderer) throw Error('Not in the renderer process.');
+    if (!ipcRenderer) throw Error('Not in the renderer process.');
 
     const messageHandler = this.channel.createHandler<IpcHandler<T>>(handler);
 
     // Handle asynchronous messages.
-    globalIpcRenderer.on(
+    ipcRenderer.on(
       this.name,
       async (e, functionName: string, id: string, ...args) => {
         let res = Promise.resolve(messageHandler(functionName, {}, ...args));
 
-        globalIpcRenderer.send(`${this.name}${functionName}${id}`, await res);
+        ipcRenderer.send(`${this.name}${functionName}${id}`, await res);
       },
     );
   }

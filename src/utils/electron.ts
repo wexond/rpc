@@ -1,14 +1,8 @@
-import { IpcRenderer, IpcMain } from 'electron';
-
-export const getGlobalIPC = () => {
-  let globalIpcRenderer: IpcRenderer | undefined = undefined;
-  let globalIpcMain: IpcMain | undefined = undefined;
-
-  if (require) {
+export const getIPCContexts = () => {
+  if (require && process?.kill) {
     const { ipcRenderer, ipcMain } = require('electron');
-    globalIpcRenderer = ipcRenderer;
-    globalIpcMain = ipcMain;
+    return { ipcRenderer, ipcMain };
   }
 
-  return { globalIpcRenderer, globalIpcMain };
+  return {};
 };
