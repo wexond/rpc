@@ -27,7 +27,6 @@ export class Channel<T extends IpcScaffold<T>> {
     ...args: any[]
   ) => {
     return obj[functionName](
-      e,
       { ...e, channel: this.name } as IpcEvent,
       ...args,
     );

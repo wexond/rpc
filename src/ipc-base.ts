@@ -10,5 +10,5 @@ export abstract class IpcBase<T extends IpcScaffold<T>> {
 
   public abstract createInvoker(...args: any[]): T;
 
-  public abstract registerHandler(handler: IpcHandler<T>): void;
+  public abstract setHandler(handler: IpcHandler<T> | undefined): void;
 }

@@ -21,7 +21,7 @@
     "url": "git+https://github.com/wexond/electron-rpc.git"
   },
   "scripts": {
-    "build:dev": "tsc --watch",
+    "watch": "tsc --watch",
     "build:prod": "npm run clean && tsc",
     "clean": "rimraf build",
     "prepublishOnly": "npm run build:prod"
