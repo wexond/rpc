@@ -1,21 +1,44 @@
-import { RpcScaffold, RpcMainHandler } from './interfaces';
-import { RpcBase } from './ipc-base';
-import { getIpcMain, getIpcRenderer } from './utils';
+import { RpcScaffold, RpcMainHandler, RpcMainObserver } from './interfaces';
+import { RpcBase } from './rpc-base';
+import { cacheIpcPossiblyInvalid, getIpcMain, getIpcRenderer } from './utils';
+import { getNoHandlerError } from './utils/errors';
 
-export class RpcRendererToMain<T extends RpcScaffold<T>> extends RpcBase<T, RpcMainHandler<T>> {
-  private syncHandler: ((...args: any[]) => void) | undefined;
-
+export class RpcRendererToMain<T extends RpcScaffold<T>> extends RpcBase<
+  T,
+  RpcMainHandler<T>,
+  RpcMainObserver<T>
+> {
   constructor(name: string, private readonly syncFunctions?: (keyof T)[]) {
     super(name);
+
+    // Don't throw no ipcMain error if there's ipcRenderer available.
+    if (cacheIpcPossiblyInvalid('ipcRenderer')) return;
+
+    const ipcMain = getIpcMain();
+
+    ipcMain.on(this.name, async (e, functionName: string, ...args) => {
+      const caller = this.channel.createCaller(functionName, e, ...args);
+
+      for (const observer of this.observers) {
+        caller(observer);
+      }
+
+      if (!this.handler && syncFunctions?.includes(functionName as keyof T)) {
+        e.returnValue = undefined;
+        throw getNoHandlerError(this.name, functionName);
+      }
+
+      e.returnValue = await Promise.resolve(caller(this.handler));
+    });
+
+    ipcMain.handle(this.name, (e, functionName: string, ...args) => {
+      if (!this.handler) throw getNoHandlerError(this.name, functionName);
+      return this.channel.createCaller(functionName, e, ...args)(this.handler);
+    });
   }
 
   public createInvoker() {
     const ipcRenderer = getIpcRenderer();
-
-    if (!ipcRenderer) {
-      throw new Error('IpcRenderer could not be found in this context.');
-    }
-
     const syncs = this.syncFunctions ?? [];
 
     // Validate the IpcRenderer object.
@@ -37,36 +60,5 @@ export class RpcRendererToMain<T extends RpcScaffold<T>> extends RpcBase<T, RpcM
         return fn(channelName, functionName, ...args);
       },
     );
-  }
-
-  public setHandler(handler: RpcMainHandler<T> | undefined) {
-    const ipcMain = getIpcMain();
-    if (!ipcMain) throw Error('Not in the main process.');
-
-    if (!handler) {
-      if (this.syncHandler) {
-        ipcMain.removeHandler(this.name);
-        ipcMain.removeListener(this.name, this.syncHandler);
-        this.syncHandler = undefined;
-      }
-      return;
-    }
-
-    const messageHandler = this.channel.createHandler<RpcMainHandler<T>>(handler);
-
-    // Handle synchronous messages.
-    this.syncHandler = async (e, functionName: string, ...args) => {
-      e.returnValue = await Promise.resolve(messageHandler(
-        functionName,
-        e,
-        ...args,
-      ));
-    };
-    ipcMain.on(this.name, this.syncHandler);
-
-    // Handle asynchronous messages.
-    ipcMain.handle(this.name, (e, functionName: string, ...args) => {
-      return messageHandler(functionName, e, ...args);
-    });
   }
 }

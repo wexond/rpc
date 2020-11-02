@@ -21,11 +21,11 @@ export class Channel<T extends RpcScaffold<T>> {
     return proxy as T;
   }
 
-  public createHandler = <K>(obj: K) => (
+  public createCaller = (
     functionName: string,
     e: Omit<RpcEventBase, 'channel'>,
     ...args: any[]
-  ) => {
+  ) => <K extends RpcScaffold<K>>(obj: K) => {
     return obj[functionName](
       { ...e, channel: this.name } as RpcEventBase,
       ...args,
