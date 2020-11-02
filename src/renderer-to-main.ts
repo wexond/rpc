@@ -16,6 +16,11 @@ export class RpcRendererToMain<T extends RpcScaffold<T>> extends RpcBase<
 
     const ipcMain = getIpcMain();
 
+    // Prevent ipcMain leaks.
+    if (ipcMain.eventNames().includes(this.name)) {
+      ipcMain.removeAllListeners(this.name);
+    }
+
     ipcMain.on(this.name, async (e, functionName: string, ...args) => {
       const caller = this.channel.createCaller(functionName, e, ...args);
 

@@ -22,6 +22,11 @@ export class RpcMainToRenderer<T extends RpcScaffold<T>> extends RpcBase<
 
     const ipcRenderer = getIpcRenderer();
 
+    // Prevent ipcRenderer leaks.
+    if (ipcRenderer.eventNames().includes(this.name)) {
+      ipcRenderer.removeAllListeners(this.name);
+    }
+
     ipcRenderer.on(
       this.name,
       async (e, functionName: string, id: string, ...args) => {
