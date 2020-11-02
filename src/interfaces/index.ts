@@ -1,2 +1,2 @@
-export * from './ipc';
+export * from './rpc';
 export * from './utils';

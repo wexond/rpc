@@ -1,7 +1,7 @@
 import { Channel } from './channel';
-import { IpcHandler, IpcScaffold } from './interfaces';
+import { RpcScaffold } from './interfaces';
 
-export abstract class IpcBase<T extends IpcScaffold<T>> {
+export abstract class RpcBase<T extends RpcScaffold<T>, Handler> {
   protected readonly channel: Channel<T>;
 
   constructor(public readonly name: string) {
@@ -10,5 +10,5 @@ export abstract class IpcBase<T extends IpcScaffold<T>> {
 
   public abstract createInvoker(...args: any[]): T;
 
-  public abstract setHandler(handler: IpcHandler<T> | undefined): void;
+  public abstract setHandler(handler: Handler | undefined): void;
 }

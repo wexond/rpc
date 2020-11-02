@@ -1,6 +1,6 @@
-import { IpcEvent, IpcScaffold } from './interfaces';
+import { RpcEventBase, RpcScaffold } from './interfaces';
 
-export class Channel<T extends IpcScaffold<T>> {
+export class Channel<T extends RpcScaffold<T>> {
   constructor(public readonly name) {}
 
   public createInvoker(
@@ -23,11 +23,11 @@ export class Channel<T extends IpcScaffold<T>> {
 
   public createHandler = <K>(obj: K) => (
     functionName: string,
-    e: Omit<IpcEvent, 'channel'>,
+    e: Omit<RpcEventBase, 'channel'>,
     ...args: any[]
   ) => {
     return obj[functionName](
-      { ...e, channel: this.name } as IpcEvent,
+      { ...e, channel: this.name } as RpcEventBase,
       ...args,
     );
   };

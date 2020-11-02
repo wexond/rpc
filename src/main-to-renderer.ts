@@ -1,10 +1,10 @@
 import { WebContents } from 'electron';
 
-import { IpcScaffold, IpcHandler } from './interfaces';
-import { IpcBase } from './ipc-base';
+import { RpcScaffold, RpcRendererHandler } from './interfaces';
+import { RpcBase } from './ipc-base';
 import { getIpcMain, getIpcRenderer } from './utils';
 
-export class IpcMainToRenderer<T extends IpcScaffold<T>> extends IpcBase<T> {
+export class RpcMainToRenderer<T extends RpcScaffold<T>> extends RpcBase<T, RpcRendererHandler<T>> {
   private asyncHandler: ((...args: any[]) => void) | undefined;
 
   public createInvoker(webContents: WebContents) {
@@ -32,7 +32,7 @@ export class IpcMainToRenderer<T extends IpcScaffold<T>> extends IpcBase<T> {
     );
   }
 
-  public setHandler(handler: IpcHandler<T> | undefined) {
+  public setHandler(handler: RpcRendererHandler<T> | undefined) {
     const ipcRenderer = getIpcRenderer();
     if (!ipcRenderer) throw Error('IpcRenderer not found.');
 
@@ -44,11 +44,11 @@ export class IpcMainToRenderer<T extends IpcScaffold<T>> extends IpcBase<T> {
       return;
     }
 
-    const messageHandler = this.channel.createHandler<IpcHandler<T>>(handler);
+    const messageHandler = this.channel.createHandler<RpcRendererHandler<T>>(handler);
 
     // Handle asynchronous messages.
     this.asyncHandler = async (e, functionName: string, id: string, ...args) => {
-      let res = Promise.resolve(messageHandler(functionName, {}, ...args));
+      let res = Promise.resolve(messageHandler(functionName, e, ...args));
       ipcRenderer.send(`${this.name}${functionName}${id}`, await res);
     }
     ipcRenderer.on(this.name, this.asyncHandler);

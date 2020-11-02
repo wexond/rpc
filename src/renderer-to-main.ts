@@ -1,8 +1,8 @@
-import { IpcScaffold, IpcHandler } from './interfaces';
-import { IpcBase } from './ipc-base';
+import { RpcScaffold, RpcMainHandler } from './interfaces';
+import { RpcBase } from './ipc-base';
 import { getIpcMain, getIpcRenderer } from './utils';
 
-export class IpcRendererToMain<T extends IpcScaffold<T>> extends IpcBase<T> {
+export class RpcRendererToMain<T extends RpcScaffold<T>> extends RpcBase<T, RpcMainHandler<T>> {
   private syncHandler: ((...args: any[]) => void) | undefined;
 
   constructor(name: string, private readonly syncFunctions?: (keyof T)[]) {
@@ -39,7 +39,7 @@ export class IpcRendererToMain<T extends IpcScaffold<T>> extends IpcBase<T> {
     );
   }
 
-  public setHandler(handler: IpcHandler<T> | undefined) {
+  public setHandler(handler: RpcMainHandler<T> | undefined) {
     const ipcMain = getIpcMain();
     if (!ipcMain) throw Error('Not in the main process.');
 
@@ -52,13 +52,13 @@ export class IpcRendererToMain<T extends IpcScaffold<T>> extends IpcBase<T> {
       return;
     }
 
-    const messageHandler = this.channel.createHandler<IpcHandler<T>>(handler);
+    const messageHandler = this.channel.createHandler<RpcMainHandler<T>>(handler);
 
     // Handle synchronous messages.
     this.syncHandler = async (e, functionName: string, ...args) => {
       e.returnValue = await Promise.resolve(messageHandler(
         functionName,
-        { webContents: e.sender },
+        e,
         ...args,
       ));
     };
@@ -66,7 +66,7 @@ export class IpcRendererToMain<T extends IpcScaffold<T>> extends IpcBase<T> {
 
     // Handle asynchronous messages.
     ipcMain.handle(this.name, (e, functionName: string, ...args) => {
-      return messageHandler(functionName, { webContents: e.sender }, ...args);
+      return messageHandler(functionName, e, ...args);
     });
   }
 }
