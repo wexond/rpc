@@ -4,21 +4,33 @@ export type RpcScaffold<T> = {
   [K in keyof T]: AnyFunction;
 };
 
-export type RpcMainHandler<T extends RpcScaffold<T>> = {
-  [K in keyof T]: RpcHandlerMethod<T[K], RpcMainEvent>;
+export type RpcHandler<T extends RpcScaffold<T>, N> = {
+  [K in keyof T]: RpcHandlerMethod<T[K], N>;
 };
 
-export type RpcRendererHandler<T extends RpcScaffold<T>> = {
-  [K in keyof T]: RpcHandlerMethod<T[K], RpcRendererEvent>;
+export type RpcObserver<T extends RpcScaffold<T>, N> = {
+  [K in keyof T]: RpcObserverMethod<T[K], N>;
 };
 
-export type RpcMainObserver<T extends RpcScaffold<T>> = {
-  [K in keyof T]: RpcObserverMethod<T[K], RpcMainEvent>;
-};
+export type RpcMainHandler<T extends RpcScaffold<T>> = RpcHandler<
+  T,
+  RpcMainEvent
+>;
 
-export type RpcRendererObserver<T extends RpcScaffold<T>> = {
-  [K in keyof T]: RpcObserverMethod<T[K], RpcRendererEvent>;
-};
+export type RpcRendererHandler<T extends RpcScaffold<T>> = RpcHandler<
+  T,
+  RpcRendererEvent
+>;
+
+export type RpcMainObserver<T extends RpcScaffold<T>> = RpcObserver<
+  T,
+  RpcMainEvent
+>;
+
+export type RpcRendererObserver<T extends RpcScaffold<T>> = RpcObserver<
+  T,
+  RpcRendererEvent
+>;
 
 type RpcMethod<T extends AnyFunction, K, R> = (
   e: K,
