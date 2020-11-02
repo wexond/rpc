@@ -25,7 +25,11 @@ type RpcMethod<T extends AnyFunction, K, R> = (
   ...args: Parameters<T>
 ) => R;
 
-type RpcHandlerMethod<T extends AnyFunction, K> = RpcMethod<T, K, ReturnType<T>>;
+type RpcHandlerMethod<T extends AnyFunction, K> = RpcMethod<
+  T,
+  K,
+  ReturnType<T>
+>;
 
 type RpcObserverMethod<T extends AnyFunction, K> = RpcMethod<T, K, void>;
 
