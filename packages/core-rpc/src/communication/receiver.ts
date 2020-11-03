@@ -1,4 +1,8 @@
-import { RpcEventBase, ServiceCaller } from '../interfaces';
+import {
+  HandlerInvokerService,
+  RpcEventBase,
+  ServiceCaller,
+} from '../interfaces';
 import { ObserverManager } from './observer-manager';
 
 export interface HandlerInvokerResponse {
@@ -11,7 +15,7 @@ export abstract class Receiver<Observer> {
 
   constructor(
     protected channelName: string,
-    protected handlerInvoker: (caller: ServiceCaller) => HandlerInvokerResponse,
+    protected handlerInvoker: HandlerInvokerService,
   ) {}
 
   public abstract listen(): void;
