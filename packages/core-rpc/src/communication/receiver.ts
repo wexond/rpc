@@ -14,7 +14,7 @@ export abstract class Receiver<Observer> {
   public observers = new ObserverManager<Observer>();
 
   constructor(
-    protected channelName: string,
+    protected channel: string,
     protected handlerInvoker: HandlerInvokerService,
   ) {}
 
@@ -30,7 +30,7 @@ export abstract class Receiver<Observer> {
     return {
       cb: (obj: any): ServiceCaller => {
         return obj[method](
-          { ...e, channel: this.channelName } as RpcEventBase,
+          { ...e, channel: this.channel } as RpcEventBase,
           ...args,
         );
       },

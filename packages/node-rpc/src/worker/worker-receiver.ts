@@ -27,6 +27,6 @@ export class WorkerReceiver<T extends RpcScaffold<T>> extends Receiver<
   }
 
   public clearEvents() {
-    clearEvents(parentPort as MessagePort, this.channelName);
+    clearEvents(parentPort as MessagePort, this.channel);
   }
 }

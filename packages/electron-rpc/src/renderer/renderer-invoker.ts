@@ -15,11 +15,11 @@ export class RendererInvoker<T> extends Invoker {
       return new Promise((resolve, reject) => {
         const id = makeRandomId();
 
-        ipcMain.once(`${this.channelName}${method}${id}`, (e, returnValue) => {
+        ipcMain.once(`${this.channel}${method}${id}`, (e, returnValue) => {
           resolve(returnValue);
         });
 
-        webContents.send(this.channelName, method, id, ...args);
+        webContents.send(this.channel, method, id, ...args);
       });
     });
   }

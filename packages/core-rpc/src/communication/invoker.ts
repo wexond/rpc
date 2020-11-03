@@ -1,7 +1,7 @@
 import { InvokerCallback } from '../interfaces';
 
 export abstract class Invoker {
-  constructor(protected channelName: string) {}
+  constructor(protected channel: string) {}
 
   public abstract create(...args: any[]): any;
 

@@ -13,13 +13,13 @@ export class RendererReceiver<T extends RpcScaffold<T>> extends Receiver<
     const ipcRenderer = getIpcRenderer();
 
     ipcRenderer.on(
-      this.channelName,
+      this.channel,
       async (e, method: string, id: string, ...args) => {
         const caller = this.createCaller(method, e, ...args);
 
         const { res, error } = this.handlerInvoker(caller);
 
-        ipcRenderer.send(`${this.channelName}${method}${id}`, res, error);
+        ipcRenderer.send(`${this.channel}${method}${id}`, res, error);
 
         this.observers.notify(caller);
       },
@@ -27,6 +27,6 @@ export class RendererReceiver<T extends RpcScaffold<T>> extends Receiver<
   }
 
   public clearEvents() {
-    clearEvents(getIpcRenderer(), this.channelName);
+    clearEvents(getIpcRenderer(), this.channel);
   }
 }

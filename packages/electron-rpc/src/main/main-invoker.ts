@@ -27,7 +27,7 @@ export class MainInvoker<T> extends Invoker {
           fn = ipcRenderer.sendSync;
         }
 
-        return fn(this.channelName, method, ...args);
+        return fn(this.channel, method, ...args);
       });
     });
   }

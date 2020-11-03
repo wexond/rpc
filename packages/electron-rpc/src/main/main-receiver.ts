@@ -26,7 +26,7 @@ export class MainReceiver<T extends RpcScaffold<T>> extends Receiver<
 
     const ipcMain = getIpcMain();
 
-    ipcMain.on(this.channelName, async (e, method: string, ...args) => {
+    ipcMain.on(this.channel, async (e, method: string, ...args) => {
       const caller = this.createCaller(method, e, ...args);
 
       this.observers.notify(caller);
@@ -36,20 +36,19 @@ export class MainReceiver<T extends RpcScaffold<T>> extends Receiver<
         this.syncFunctions?.includes(method as keyof T)
       ) {
         e.returnValue = undefined;
-        throw getNoHandlerError(this.channelName, method);
+        throw getNoHandlerError(this.channel, method);
       }
 
       e.returnValue = await Promise.resolve(caller.cb(this.handlerInvoker));
     });
 
-    ipcMain.handle(this.channelName, (e, method: string, ...args) => {
-      if (!this.handlerInvoker)
-        throw getNoHandlerError(this.channelName, method);
+    ipcMain.handle(this.channel, (e, method: string, ...args) => {
+      if (!this.handlerInvoker) throw getNoHandlerError(this.channel, method);
       return this.createCaller(method, e, ...args).cb(this.handlerInvoker);
     });
   }
 
   public clearEvents() {
-    clearEvents(getIpcMain(), this.channelName);
+    clearEvents(getIpcMain(), this.channel);
   }
 }
