@@ -1,32 +1,33 @@
 import { Receiver, RpcScaffold, clearEvents } from '@wexond/rpc-core';
 
-import { RpcRendererObserver } from '../interfaces';
+import { RpcRendererHandler, RpcRendererObserver } from '../interfaces';
 import { cacheIpcPossiblyInvalid, getIpcRenderer } from '../utils';
 
 export class RendererReceiver<T extends RpcScaffold<T>> extends Receiver<
+  RpcRendererHandler<T>,
   RpcRendererObserver<T>
 > {
-  public listen() {
+  constructor(name: string) {
+    super(name);
+
     // Don't throw no ipcRenderer error if there's ipcMain available.
     if (cacheIpcPossiblyInvalid('ipcMain')) return;
 
     const ipcRenderer = getIpcRenderer();
 
+    // Prevent EventEmitter leaks.
+    clearEvents(getIpcRenderer(), this.name);
+
     ipcRenderer.on(
-      this.channel,
+      this.name,
       async (e, method: string, id: string, ...args) => {
         const caller = this.createCaller(method, e, ...args);
+        const { res, error } = this.invokeRemoteHandler(caller);
 
-        const { res, error } = this.handlerInvoker(caller);
-
-        ipcRenderer.send(`${this.channel}${method}${id}`, res, error);
+        ipcRenderer.send(`${this.name}${method}${id}`, res, error);
 
         this.observers.notify(caller);
       },
     );
-  }
-
-  public clearEvents() {
-    clearEvents(getIpcRenderer(), this.channel);
   }
 }

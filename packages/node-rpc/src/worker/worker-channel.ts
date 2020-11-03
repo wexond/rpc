@@ -1,37 +1,52 @@
-import { parentPort } from 'worker_threads';
-import { Channel, RpcScaffold } from '@wexond/rpc-core';
-
-import { WorkerInvoker } from './worker-invoker';
+import { MessagePort, parentPort } from 'worker_threads';
+import {
+  ChannelWithMultipleReceivers,
+  createServiceProxy,
+  makeRandomId,
+  RpcScaffold,
+} from '@wexond/rpc-core';
 import { WorkerReceiver } from './worker-receiver';
-import { RpcWorkerHandler, RpcWorkerObserver } from '../interfaces';
+import { RpcWorkerRequest, RpcWorkerResponse } from '../interfaces';
 
-export class WorkerChannel<T extends RpcScaffold<T>> extends Channel<
-  T,
-  RpcWorkerHandler<T>,
-  RpcWorkerObserver<T>
-> {
-  public invoker: WorkerInvoker<T>;
+export class WorkerChannel<
+  T extends RpcScaffold<T>
+> extends ChannelWithMultipleReceivers<T> {
+  protected createInvoker(port?: MessagePort): T {
+    if (!port && !parentPort) throw new Error('Invalid MessagePort.');
 
-  public receiver: WorkerReceiver<RpcWorkerObserver<T>>;
+    return createServiceProxy<T>((method, ...args: any[]) => {
+      return new Promise((resolve, reject) => {
+        const req: RpcWorkerRequest = {
+          id: makeRandomId(),
+          method,
+          args,
+        };
 
-  constructor(name: string) {
-    super(name);
+        const listener = (e: RpcWorkerResponse) => {
+          if (e.id === req.id) {
+            port.removeListener('message', listener);
 
-    this.setup();
+            if (e.error) return reject(e.error);
+            resolve(e.returnValue);
+          }
+        };
+
+        port.addListener('message', listener);
+        port.postMessage(req);
+      });
+    });
   }
 
-  public isReceiver() {
-    return parentPort != null;
+  protected createReceiver(port?: MessagePort): WorkerReceiver<T> {
+    if (!port && !parentPort) throw new Error('Invalid MessagePort.');
+    return new WorkerReceiver<T>(this.name, port ?? parentPort);
   }
 
-  protected setupInvoker() {
-    this.invoker = new WorkerInvoker(this.name);
+  public getInvoker(port?: MessagePort): T {
+    return super.getInvoker(port);
   }
 
-  protected setupReceiver() {
-    this.receiver = new WorkerReceiver(this.name, this.invokeHandler);
-
-    this.receiver.clearEvents();
-    this.receiver.listen();
+  public getReceiver(port?: MessagePort): WorkerReceiver<T> {
+    return super.getReceiver(port);
   }
 }

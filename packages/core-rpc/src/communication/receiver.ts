@@ -1,8 +1,5 @@
-import {
-  HandlerInvokerService,
-  RpcEventBase,
-  ServiceCaller,
-} from '../interfaces';
+import { getNoHandlerError } from '..';
+import { ServiceCaller } from '../interfaces';
 import { ObserverManager } from './observer-manager';
 
 export interface HandlerInvokerResponse {
@@ -10,31 +7,39 @@ export interface HandlerInvokerResponse {
   error?: Error;
 }
 
-export abstract class Receiver<Observer> {
+export abstract class Receiver<Handler, Observer> {
   public observers = new ObserverManager<Observer>();
 
-  constructor(
-    protected channel: string,
-    protected handlerInvoker: HandlerInvokerService,
-  ) {}
+  public handler: Handler;
 
-  public abstract listen(): void;
-
-  public abstract clearEvents(): void;
+  constructor(protected name: string) {}
 
   protected createCaller = (
     method: string,
-    e: Omit<RpcEventBase, 'channel'>,
+    e: any,
     ...args: any[]
   ): ServiceCaller => {
     return {
       cb: (obj: any): ServiceCaller => {
-        return obj[method](
-          { ...e, channel: this.channel } as RpcEventBase,
-          ...args,
-        );
+        return obj[method]({ ...e, channel: this.name }, ...args);
       },
       method,
     };
+  };
+
+  protected invokeRemoteHandler = (
+    caller: ServiceCaller,
+  ): HandlerInvokerResponse => {
+    let error: Error | undefined = undefined;
+    let res: any | undefined = undefined;
+
+    try {
+      if (!this.handler) throw getNoHandlerError(this.name, caller.method);
+      res = caller.cb(this.handler);
+    } catch (e) {
+      error = e;
+    }
+
+    return { res, error };
   };
 }
