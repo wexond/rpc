@@ -20,15 +20,13 @@ export class MainInvoker<T> extends Invoker {
     }
 
     return this.createProxy<T>((method, ...args: any[]) => {
-      return new Promise((resolve, reject) => {
-        let fn: (...args: any[]) => any = ipcRenderer.invoke;
+      let fn: (...args: any[]) => any = ipcRenderer.invoke;
 
-        if (syncs.includes(method as keyof T)) {
-          fn = ipcRenderer.sendSync;
-        }
+      if (syncs.includes(method as keyof T)) {
+        fn = ipcRenderer.sendSync;
+      }
 
-        return fn(this.channel, method, ...args);
-      });
+      return fn(this.channel, method, ...args);
     });
   }
 }

@@ -1,11 +1,11 @@
 import { Channel, RpcScaffold } from '@wexond/rpc-core';
 
 import { RpcMainHandler, RpcMainObserver } from '../interfaces';
-import { MainReceiver } from './main-receiver';
-import { MainInvoker } from './main-invoker';
+import { MainReceiver } from '../main/main-receiver';
+import { MainInvoker } from '../main/main-invoker';
 import { cacheIpcPossiblyInvalid } from '../utils';
 
-export class MainChannel<T extends RpcScaffold<T>> extends Channel<
+export class RendererToMainChannel<T extends RpcScaffold<T>> extends Channel<
   T,
   RpcMainHandler<T>,
   RpcMainObserver<T>

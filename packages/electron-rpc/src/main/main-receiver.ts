@@ -7,7 +7,7 @@ import {
 } from '@wexond/rpc-core';
 
 import { RpcMainObserver } from '../interfaces';
-import { cacheIpcPossiblyInvalid, getIpcMain, getIpcRenderer } from '../utils';
+import { cacheIpcPossiblyInvalid, getIpcMain } from '../utils';
 
 export class MainReceiver<T extends RpcScaffold<T>> extends Receiver<
   RpcMainObserver<T>
