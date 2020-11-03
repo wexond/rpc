@@ -11,7 +11,7 @@ export abstract class Invoker {
       {},
       {
         get: (obj, prop: string) => {
-          return (...args) => cb(prop, ...args);
+          return (...args: any[]) => cb(prop, ...args);
         },
       },
     );

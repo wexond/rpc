@@ -1,0 +1,23 @@
+{
+  "name": "@wexond/node-rpc",
+  "version": "1.0.0",
+  "description": "Type-safe inter-process communication for Node.js Worker Thread",
+  "main": "build/index.js",
+  "typings": "build/index.d.ts",
+  "files": [
+    "build"
+  ],
+  "homepage": "https://github.com/wexond/rpc#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wexond/rpc.git"
+  },
+  "scripts": {
+    "watch": "tsc --watch",
+    "build:prod": "tsc",
+    "prepublishOnly": "npm run build:prod"
+  },
+  "dependencies": {
+    "@wexond/rpc-core": "^1.0.0"
+  }
+}
