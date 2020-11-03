@@ -21,7 +21,7 @@
     "url": "git+https://github.com/wexond/rpc.git"
   },
   "scripts": {
-    "watchx": "tsc --watch",
+    "watch": "tsc --watch",
     "build:prod": "tsc",
     "prepublishOnly": "npm run build:prod"
   },
