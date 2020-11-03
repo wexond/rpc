@@ -1,2 +1,6 @@
-export * from './interfaces';
-export * from './worker';
+export {
+  RpcWorkerEvent,
+  RpcWorkerHandler,
+  RpcWorkerObserver,
+} from './interfaces';
+export { WorkerChannel } from './worker';
