@@ -12,7 +12,7 @@ export abstract class Channel<T extends RpcScaffold<T>, Handler, Observer> {
 
   constructor(public readonly name: string) {}
 
-  public setup() {
+  protected setup() {
     if (this.isReceiver()) this.setupReceiver();
     else this.setupInvoker();
   }
