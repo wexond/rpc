@@ -1,7 +1,7 @@
 import { RpcScaffold } from '..';
 import { Channel } from './channel';
 
-export abstract class ChannelWithMultipleReceivers<
+export abstract class MultipleReceiversChannel<
   T extends RpcScaffold<T>
 > extends Channel<T> {
   private receivers: Map<any[], any> = new Map();

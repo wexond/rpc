@@ -13,8 +13,7 @@ export abstract class ChannelWithSingleReceiver<
 
   public getReceiver(): any {
     if (!this.isReceiver()) throw new Error('This context is not a receiver.');
-    if (!this.receiverSingleton)
-      this.receiverSingleton = this.createReceiver();
+    if (!this.receiverSingleton) this.receiverSingleton = this.createReceiver();
     return this.receiverSingleton;
   }
 

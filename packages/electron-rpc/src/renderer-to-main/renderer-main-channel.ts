@@ -7,6 +7,11 @@ import {
 import { MainReceiver } from './main-receiver';
 import { cacheIpcPossiblyInvalid, getIpcRenderer } from '../utils';
 
+export declare interface RendererToMainChannel<T> {
+  getReceiver(): MainReceiver<T>;
+  getInvoker(): T;
+}
+
 export class RendererToMainChannel<
   T extends RpcScaffold<T>
 > extends ChannelWithSingleReceiver<T> {
@@ -45,11 +50,11 @@ export class RendererToMainChannel<
     return new MainReceiver<T>(this.name);
   }
 
-  public getInvoker(): T {
-    return super.getInvoker();
-  }
-
   public getReceiver(): MainReceiver<T> {
     return super.getReceiver();
+  }
+
+  public getInvoker(): T {
+    return super.getInvoker();
   }
 }

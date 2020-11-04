@@ -8,6 +8,11 @@ import {
 import { RendererReceiver } from './renderer-receiver';
 import { cacheIpcPossiblyInvalid, getIpcMain } from '../utils';
 
+export declare interface MainToRendererChannel<T> {
+  getReceiver(): RendererReceiver<T>;
+  getInvoker(webContents: Electron.WebContents): T;
+}
+
 export class MainToRendererChannel<
   T extends RpcScaffold<T>
 > extends ChannelWithSingleReceiver<T> {
@@ -35,15 +40,7 @@ export class MainToRendererChannel<
     });
   }
 
-  protected createReceiver(): RendererReceiver<T> {
+  protected createReceiver() {
     return new RendererReceiver<T>(this.name);
-  }
-
-  public getReceiver(): RendererReceiver<T> {
-    return super.getReceiver();
-  }
-
-  public getInvoker(webContents: Electron.WebContents): T {
-    return super.getInvoker(webContents);
   }
 }
