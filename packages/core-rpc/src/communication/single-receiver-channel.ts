@@ -1,7 +1,7 @@
 import { RpcScaffold } from '..';
 import { Channel } from './channel';
 
-export abstract class ChannelWithSingleReceiver<
+export abstract class SingleReceiverChannel<
   T extends RpcScaffold<T>
 > extends Channel<T> {
   private receiverSingleton: any;

@@ -1,4 +1,4 @@
-import { Receiver, RpcScaffold, clearEvents } from '@wexond/rpc-core';
+import { Receiver, RpcScaffold } from '@wexond/rpc-core';
 import { MessagePort } from 'worker_threads';
 
 import {
@@ -9,7 +9,7 @@ import {
 } from '../interfaces';
 
 export class WorkerReceiver<T extends RpcScaffold<T>> extends Receiver<
-RpcWorkerHandler<T>,
+  RpcWorkerHandler<T>,
   RpcWorkerObserver<T>
 > {
   constructor(name: string, port: MessagePort) {

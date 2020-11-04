@@ -1,5 +1,5 @@
 import {
-  ChannelWithSingleReceiver,
+  SingleReceiverChannel,
   createServiceProxy,
   RpcScaffold,
 } from '@wexond/rpc-core';
@@ -14,7 +14,7 @@ export declare interface RendererToMainChannel<T> {
 
 export class RendererToMainChannel<
   T extends RpcScaffold<T>
-> extends ChannelWithSingleReceiver<T> {
+> extends SingleReceiverChannel<T> {
   constructor(name: string, private readonly syncFunctions?: (keyof T)[]) {
     super(name);
   }

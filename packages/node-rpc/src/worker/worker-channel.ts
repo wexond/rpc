@@ -1,6 +1,6 @@
 import { MessagePort, parentPort } from 'worker_threads';
 import {
-  ChannelWithMultipleReceivers,
+  MultiReceiverChannel,
   createServiceProxy,
   makeRandomId,
   RpcScaffold,
@@ -10,7 +10,7 @@ import { RpcWorkerRequest, RpcWorkerResponse } from '../interfaces';
 
 export class WorkerChannel<
   T extends RpcScaffold<T>
-> extends ChannelWithMultipleReceivers<T> {
+> extends MultiReceiverChannel<T> {
   protected createInvoker(port?: MessagePort): T {
     if (!port && !parentPort) throw new Error('Invalid MessagePort.');
 

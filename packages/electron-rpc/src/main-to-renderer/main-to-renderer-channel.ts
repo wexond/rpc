@@ -1,5 +1,5 @@
 import {
-  ChannelWithSingleReceiver,
+  SingleReceiverChannel,
   createServiceProxy,
   makeRandomId,
   RpcScaffold,
@@ -15,7 +15,7 @@ export declare interface MainToRendererChannel<T> {
 
 export class MainToRendererChannel<
   T extends RpcScaffold<T>
-> extends ChannelWithSingleReceiver<T> {
+> extends SingleReceiverChannel<T> {
   public isReceiver() {
     return cacheIpcPossiblyInvalid('ipcRenderer') != null;
   }
