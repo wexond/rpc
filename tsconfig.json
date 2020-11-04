@@ -11,7 +11,7 @@
     "preserveWatchOutput": true,
 
     "module": "commonjs",
-    "target": "esnext",
+    "target": "es6",
     "lib": ["esnext"],
     "moduleResolution": "node",
 
