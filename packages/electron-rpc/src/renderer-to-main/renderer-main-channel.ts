@@ -49,12 +49,4 @@ export class RendererToMainChannel<
   protected createReceiver(): MainReceiver<T> {
     return new MainReceiver<T>(this.name);
   }
-
-  public getReceiver(): MainReceiver<T> {
-    return super.getReceiver();
-  }
-
-  public getInvoker(): T {
-    return super.getInvoker();
-  }
 }
