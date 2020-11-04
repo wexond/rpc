@@ -13,9 +13,9 @@ See home [readme](https://github.com/wexond/rpc) for more details.
 $ npm install @wexond/rpc-node @wexond/rpc-core
 ```
 
-## Example
+## Examples
 
-- [Main to Worker](/examples/main-to-worker)
+- [Main to Worker](https://github.com/wexond/rpc/tree/master/packages/rpc-node/examples/main-to-worker)
 
 ## Documentation
 

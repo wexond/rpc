@@ -14,9 +14,9 @@ See home [readme](https://github.com/wexond/rpc) for more details.
 $ npm install @wexond/rpc-electron @wexond/rpc-core
 ```
 
-## Example
+## Examples
 
-- [Renderer to Main](/examples/renderer-to-main)
+- [Renderer to Main](https://github.com/wexond/rpc/tree/master/packages/rpc-electron/examples/renderer-to-main)
 
 ## Documentation
 
