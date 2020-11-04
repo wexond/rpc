@@ -12,7 +12,7 @@ No more remembering IPC channel names, parameters order and their types.
 ## Installation
 
 ```bash
-$ npm install @wexond/rpc-electron
+$ npm install @wexond/rpc-electron @wexond/rpc-core
 ```
 
 ## Example
@@ -21,7 +21,7 @@ $ npm install @wexond/rpc-electron
 Shared is a common file imported by both main process and renderers.
 
 ```ts
-import { RpcRendererToMain } from '@wexond/electron-rpc';
+import { RpcRendererToMain } from '@wexond/rpc-electron';
 
 export interface LoggerService {
   log(message: string): boolean;
@@ -37,7 +37,7 @@ import {
   RpcMainHandler,
   RpcMainEvent,
   RpcMainObserver,
-} from '@wexond/electron-rpc';
+} from '@wexond/rpc-electron';
 
 import { LoggerService, loggerChannel } from '~/shared';
 
@@ -91,7 +91,7 @@ contextBridge.exposeInMainWorld('api', {
 // This can be useful if your webContents has |contextIsolation| set to true,
 // which implies that `require('electron').ipcRenderer` would not work.
 // Though, channels could be exposed using |contextBridge| also.
-import { setIpcRenderer } from '@wexond/electron-rpc';
+import { setIpcRenderer } from '@wexond/rpc-electron';
 setIpcRenderer(api.ipcRenderer);
 
 import { loggerChannel } from '~/shared';
