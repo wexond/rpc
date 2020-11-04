@@ -1,7 +1,7 @@
 {
   "name": "@wexond/rpc-node",
   "version": "1.0.0",
-  "description": "Type-safe inter-process communication for Node.js Worker Thread",
+  "description": "Type-safe communication between message ports from Node.js worker_threads module",
   "main": "build/index.js",
   "typings": "build/index.d.ts",
   "files": [

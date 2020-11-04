@@ -1,6 +1,6 @@
 # @wexond/rpc-node
 
-Type-safe communication between message ports (Worker - Parent).
+Type-safe communication between message ports from Node.js worker_threads module.
 
 > NOTE: Although this package was made mainly for TypeScript, it can be used in JavaScript as well, but it makes no sense then.
 
