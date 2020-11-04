@@ -10,10 +10,10 @@
   },
   "scripts": {
     "watch": "lerna run --stream --parallel watch",
-    "build:prod": "npm run clean && lerna run --stream --parallel build:prod",
+    "build:prod": "npm run clean && lerna run --stream build:prod",
     "prepublishOnly": "npm run build:prod",
     "clean": "rimraf packages/**/build",
-    "postinstall": "lerna link --force-local"
+    "postinstall": "lerna link --force-local && yarn build:prod"
   },
   "devDependencies": {
     "@types/node": "14.14.6",
