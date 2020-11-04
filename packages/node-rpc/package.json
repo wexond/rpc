@@ -1,5 +1,5 @@
 {
-  "name": "@wexond/node-rpc",
+  "name": "@wexond/rpc-node",
   "version": "1.0.0",
   "description": "Type-safe inter-process communication for Node.js Worker Thread",
   "main": "build/index.js",
