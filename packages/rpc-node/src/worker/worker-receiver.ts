@@ -1,5 +1,5 @@
+import { MessagePort, Worker } from 'worker_threads';
 import { Receiver, RpcScaffold } from '@wexond/rpc-core';
-import { MessagePort } from 'worker_threads';
 
 import {
   RpcWorkerHandler,
@@ -12,7 +12,7 @@ export class WorkerReceiver<T extends RpcScaffold<T>> extends Receiver<
   RpcWorkerHandler<T>,
   RpcWorkerObserver<T>
 > {
-  constructor(name: string, port: MessagePort) {
+  constructor(name: string, port: MessagePort | Worker) {
     super(name);
 
     port.on('message', async (e: RpcWorkerRequest) => {

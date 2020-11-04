@@ -1,4 +1,4 @@
-import { MessagePort, parentPort } from 'worker_threads';
+import { MessagePort, parentPort, Worker } from 'worker_threads';
 import {
   MultiReceiverChannel,
   createServiceProxy,
@@ -8,10 +8,14 @@ import {
 import { WorkerReceiver } from './worker-receiver';
 import { RpcWorkerRequest, RpcWorkerResponse } from '../interfaces';
 
+export declare interface WorkerChannel<T> {
+  getReceiver(port?: MessagePort | Worker): WorkerReceiver<T>;
+  getInvoker(port?: MessagePort | Worker): T;
+}
 export class WorkerChannel<
   T extends RpcScaffold<T>
 > extends MultiReceiverChannel<T> {
-  protected createInvoker(port?: MessagePort): T {
+  protected createInvoker(port?: MessagePort | Worker): T {
     if (!port && !parentPort) throw new Error('Invalid MessagePort.');
 
     return createServiceProxy<T>((method, ...args: any[]) => {
@@ -37,16 +41,8 @@ export class WorkerChannel<
     });
   }
 
-  protected createReceiver(port?: MessagePort): WorkerReceiver<T> {
+  protected createReceiver(port?: MessagePort | Worker): WorkerReceiver<T> {
     if (!port && !parentPort) throw new Error('Invalid MessagePort.');
     return new WorkerReceiver<T>(this.name, port ?? parentPort);
-  }
-
-  public getInvoker(port?: MessagePort): T {
-    return super.getInvoker(port);
-  }
-
-  public getReceiver(port?: MessagePort): WorkerReceiver<T> {
-    return super.getReceiver(port);
   }
 }
