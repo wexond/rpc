@@ -17,7 +17,10 @@
     "build:prod": "tsc",
     "prepublishOnly": "npm run build:prod"
   },
-  "dependencies": {
+  "devDependencies": {
+    "@wexond/rpc-core": "^1.0.0"
+  },
+  "peerDependencies": {
     "@wexond/rpc-core": "^1.0.0"
   }
 }
