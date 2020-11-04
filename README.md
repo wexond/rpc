@@ -9,17 +9,17 @@ No more remembering channel names, parameters order and their types.
 
 ## Motivation
 
-Lets say you want to use `Worker` from Node.js `worker_threads` module. To communicate with worker you need to use `worker.postMessage`, which doesn't provide any callback function. You need to listen for messages on worker itself by `worker.on('message')`. If you want to create an async function, which will use worker under the hood, you need to write a lot of code, just to handle the communication. Also there is the type checking problem, which grows with codebase.
-
-This problem occurs in many places like Electron IPC.
-
-If we don't support your platform, you can create communication handler using our core components.
+Lets say you want to use `Worker` from Node.js `worker_threads` module. To communicate with worker you need to use `worker.postMessage`, which doesn't provide any callback function. You need to listen for messages on worker itself by `worker.on('message')`. If you want to create an async function, which will use worker under the hood, you need to write a lot of code, just to handle the communication. Also there is the type checking problem, which grows with codebase. These problems occur in many places like Electron IPC.
 
 ## Installation
 
 ```bash
 $ npm install @wexond/rpc-core
 ```
+
+## Platforms
+
+If we don't support your platform, you can create communication handler using our core components.
 
 | Platform | Package                | Details                                                                                                                                                                                                                                                                  | Documentation | Examples                                                                                                      |
 | -------- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------- | ------------------------------------------------------------------------------------------------------------- |
