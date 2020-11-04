@@ -1,42 +1,31 @@
 {
-  "name": "@wexond/electron-rpc",
-  "version": "2.0.0",
-  "description": "Type-safe inter-process communication for Electron",
-  "keywords": [
-    "electron",
-    "typescript",
-    "ipc",
-    "grpc",
-    "main",
-    "renderer"
-  ],
-  "main": "build/index.js",
-  "typings": "build/index.d.ts",
-  "files": [
-    "build"
-  ],
-  "homepage": "https://github.com/wexond/electron-rpc#readme",
+  "name": "@wexond/rpc",
+  "version": "1.0.0",
+  "description": "Type-safe inter-process communication",
+  "private": true,
+  "homepage": "https://github.com/wexond/rpc#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wexond/electron-rpc.git"
+    "url": "git+https://github.com/wexond/rpc.git"
   },
   "scripts": {
-    "watch": "tsc --watch",
-    "build:prod": "npm run clean && tsc",
-    "clean": "rimraf build",
-    "prepublishOnly": "npm run build:prod"
+    "watch": "lerna run --stream --parallel watch",
+    "build:prod": "npm run clean && lerna run --stream build:prod",
+    "prepublishOnly": "npm run build:prod",
+    "clean": "rimraf packages/**/build",
+    "postinstall": "lerna link --force-local && yarn build:prod"
   },
   "devDependencies": {
     "@types/node": "14.14.6",
-    "electron": "^10.1.5",
-    "rimraf": "^3.0.2",
-    "typescript": "4.0.5",
     "eslint": "^7.12.0",
     "eslint-config-prettier": "^6.14.0",
     "eslint-plugin-prettier": "^3.1.4",
-    "prettier": "2.1.2"
+    "lerna": "^3.22.1",
+    "prettier": "2.1.2",
+    "rimraf": "^3.0.2",
+    "typescript": "4.0.5"
   },
-  "peerDependencies": {
-    "electron": "^10.1.5"
-  }
+  "workspaces": [
+    "packages/*"
+  ]
 }

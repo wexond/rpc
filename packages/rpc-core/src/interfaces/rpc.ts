@@ -12,26 +12,6 @@ export type RpcObserver<T extends RpcScaffold<T>, N> = {
   [K in keyof T]: RpcObserverMethod<T[K], N>;
 };
 
-export type RpcMainHandler<T extends RpcScaffold<T>> = RpcHandler<
-  T,
-  RpcMainEvent
->;
-
-export type RpcRendererHandler<T extends RpcScaffold<T>> = RpcHandler<
-  T,
-  RpcRendererEvent
->;
-
-export type RpcMainObserver<T extends RpcScaffold<T>> = RpcObserver<
-  T,
-  RpcMainEvent
->;
-
-export type RpcRendererObserver<T extends RpcScaffold<T>> = RpcObserver<
-  T,
-  RpcRendererEvent
->;
-
 type RpcMethod<T extends AnyFunction, K, R> = (
   e: K,
   ...args: Parameters<T>
@@ -49,5 +29,9 @@ export interface RpcEventBase {
   channel: string;
 }
 
-export type RpcMainEvent = Electron.IpcMainEvent & RpcEventBase;
-export type RpcRendererEvent = Electron.IpcRendererEvent & RpcEventBase;
+export type InvokerCallback = (method: string, ...args: any[]) => any;
+
+export interface ServiceCaller {
+  cb: (obj: any) => any;
+  method: string;
+}
