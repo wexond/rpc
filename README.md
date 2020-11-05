@@ -70,5 +70,3 @@ More examples can be found in the `README.md` files for each platform.
 There was no viable solution for handling messaging between threads or processes with type safety in both Electron and Node.js.
 It involved a lot of potential bugs, for instance in Electron the channel names or parameters order would not be the same, sometimes leading
 to unnecessary time spent debugging why the message isn't handled properly. That's where our RPC solution comes in handy.
-
-> NOTE: If we don't support your platform, you can create your own communication handler using our core package.
