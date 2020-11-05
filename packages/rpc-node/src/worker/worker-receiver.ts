@@ -18,7 +18,7 @@ export class WorkerReceiver<T extends RpcScaffold<T>> extends Receiver<
     port.on('message', async (e: RpcWorkerRequest) => {
       const caller = this.createCaller(e.method, e, ...e.args);
 
-      const { res, error } = this.invokeRemoteHandler(caller);
+      const { res, error } = await this.invokeRemoteHandler(caller);
 
       port.postMessage({
         id: e.id,

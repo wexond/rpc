@@ -32,6 +32,6 @@ export interface RpcEventBase {
 export type InvokerCallback = (method: string, ...args: any[]) => any;
 
 export interface ServiceCaller {
-  cb: (obj: any) => any;
+  cb: (obj: any) => Promise<any>;
   method: string;
 }

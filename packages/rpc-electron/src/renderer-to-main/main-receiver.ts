@@ -38,12 +38,11 @@ export class MainReceiver<T extends RpcScaffold<T>> extends Receiver<
     });
 
     ipcMain.handle(this.name, (e, method: string, ...args) => {
-      if (!this.handler) throw getNoHandlerError(this.name, method);
-
       const caller = this.createCaller(method, e, ...args);
 
       this.observers.notify(caller);
 
+      if (!this.handler) throw getNoHandlerError(this.name, method);
       return caller.cb(this.handler);
     });
   }

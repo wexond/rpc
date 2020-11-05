@@ -20,22 +20,24 @@ export abstract class Receiver<Handler, Observer> {
     ...args: any[]
   ): ServiceCaller => {
     return {
-      cb: (obj: any): ServiceCaller => {
-        return obj[method]({ ...e, channel: this.name }, ...args);
+      cb: (obj) => {
+        return Promise.resolve(
+          obj[method]({ ...e, channel: this.name }, ...args),
+        );
       },
       method,
     };
   };
 
-  protected invokeRemoteHandler = (
+  protected invokeRemoteHandler = async (
     caller: ServiceCaller,
-  ): HandlerInvokerResponse => {
+  ): Promise<HandlerInvokerResponse> => {
     let error: Error | undefined = undefined;
     let res: any | undefined = undefined;
 
     try {
       if (!this.handler) throw getNoHandlerError(this.name, caller.method);
-      res = caller.cb(this.handler);
+      res = await caller.cb(this.handler);
     } catch (e) {
       error = e;
     }

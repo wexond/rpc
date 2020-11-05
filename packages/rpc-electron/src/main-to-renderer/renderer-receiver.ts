@@ -22,7 +22,7 @@ export class RendererReceiver<T extends RpcScaffold<T>> extends Receiver<
       this.name,
       async (e, method: string, id: string, ...args) => {
         const caller = this.createCaller(method, e, ...args);
-        const { res, error } = this.invokeRemoteHandler(caller);
+        const { res, error } = await this.invokeRemoteHandler(caller);
 
         ipcRenderer.send(`${this.name}${method}${id}`, res, error);
 
