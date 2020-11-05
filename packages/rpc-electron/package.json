@@ -22,7 +22,8 @@
   },
   "scripts": {
     "watch": "tsc --watch",
-    "build:prod": "tsc",
+    "build:prod": "npm run clean && tsc",
+    "clean": "rimraf build",
     "prepublishOnly": "npm run build:prod"
   },
   "devDependencies": {
