@@ -15,7 +15,7 @@
     "postinstall": "lerna link --force-local && yarn build:prod"
   },
   "devDependencies": {
-    "@types/node": "14.14.6",
+    "@types/node": "^14.14.6",
     "eslint": "^7.12.0",
     "eslint-config-prettier": "^6.14.0",
     "eslint-plugin-prettier": "^3.1.4",
