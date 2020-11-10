@@ -15,4 +15,12 @@ export abstract class MultiReceiverChannel<
   public getInvoker(...args: any[]): T {
     return this.createInvoker(...args);
   }
+
+  public destroy() {
+    super.destroy();
+    this.receivers.forEach((v, k) => {
+      v?.destroy?.();
+      this.receivers.delete(k);
+    });
+  }
 }

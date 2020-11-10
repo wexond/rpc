@@ -16,7 +16,7 @@ export class MainReceiver<T extends RpcScaffold<T>> extends Receiver<
     super(name);
 
     // Don't throw no ipcMain error if there's ipcRenderer available.
-    if (cacheIpcPossiblyInvalid('ipcRenderer')) return;
+    if (cacheIpcPossiblyInvalid('ipcRenderer') && process?.env?.TEST !== 'true') return;
 
     const ipcMain = getIpcMain();
 
@@ -45,5 +45,10 @@ export class MainReceiver<T extends RpcScaffold<T>> extends Receiver<
       if (!this.handler) throw getNoHandlerError(this.name, method);
       return caller.cb(this.handler);
     });
+  }
+
+  public destroy() {
+    clearEvents(getIpcMain(), this.name);
+    getIpcMain().removeHandler(this.name);
   }
 }

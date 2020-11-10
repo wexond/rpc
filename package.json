@@ -12,16 +12,26 @@
     "watch": "lerna run --stream --parallel watch",
     "build:prod": "lerna run --stream build:prod",
     "prepublishOnly": "npm run build:prod",
-    "postinstall": "lerna link --force-local && yarn build:prod"
+    "postinstall": "lerna link --force-local && yarn build:prod",
+    "test": "lerna run --stream test"
   },
   "devDependencies": {
+    "@types/chai": "^4.2.14",
+    "@types/deasync": "^0.1.1",
+    "@types/mocha": "^8.0.3",
     "@types/node": "^14.14.6",
+    "@types/sinon": "^9.0.8",
+    "chai": "^4.2.0",
+    "deasync": "^0.1.21",
     "eslint": "^7.12.0",
     "eslint-config-prettier": "^6.14.0",
     "eslint-plugin-prettier": "^3.1.4",
     "lerna": "^3.22.1",
+    "mocha": "^8.2.1",
     "prettier": "2.1.2",
     "rimraf": "^3.0.2",
+    "sinon": "^9.2.1",
+    "ts-node": "^9.0.0",
     "typescript": "4.0.5"
   },
   "workspaces": [

@@ -44,4 +44,6 @@ export abstract class Receiver<Handler, Observer> {
 
     return { res, error };
   };
+
+  public abstract destroy(): void;
 }

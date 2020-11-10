@@ -12,16 +12,22 @@ export abstract class SingleReceiverChannel<
   }
 
   public getReceiver(): any {
-    if (!this.isReceiver()) throw new Error('This context is not a receiver.');
+    if (!this.isReceiver() && process?.env?.TEST !== 'true') throw new Error('This context is not a receiver.');
     if (!this.receiverSingleton) this.receiverSingleton = this.createReceiver();
     return this.receiverSingleton;
   }
 
   public getInvoker(...args: any[]): T {
-    if (this.isReceiver())
+    if (this.isReceiver() && process?.env?.TEST !== 'true')
       throw new Error('This context cannot invoke remote methods.');
     return this.createInvoker(...args);
   }
 
   public abstract isReceiver(): boolean;
+
+  public destroy() {
+    super.destroy();
+    this.receiverSingleton?.destroy?.();
+    this.receiverSingleton = undefined;
+  }
 }

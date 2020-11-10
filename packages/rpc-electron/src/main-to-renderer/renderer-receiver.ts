@@ -11,12 +11,12 @@ export class RendererReceiver<T extends RpcScaffold<T>> extends Receiver<
     super(name);
 
     // Don't throw no ipcRenderer error if there's ipcMain available.
-    if (cacheIpcPossiblyInvalid('ipcMain')) return;
+    if (cacheIpcPossiblyInvalid('ipcMain') && process?.env?.TEST !== 'true') return;
 
     const ipcRenderer = getIpcRenderer();
 
     // Prevent EventEmitter leaks.
-    clearEvents(getIpcRenderer(), this.name);
+    clearEvents(ipcRenderer, this.name);
 
     ipcRenderer.on(
       this.name,
@@ -29,5 +29,9 @@ export class RendererReceiver<T extends RpcScaffold<T>> extends Receiver<
         this.observers.notify(caller);
       },
     );
+  }
+
+  public destroy() {
+    clearEvents(getIpcRenderer(), this.name);
   }
 }
