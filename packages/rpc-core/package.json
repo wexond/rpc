@@ -16,7 +16,8 @@
     "watch": "tsc --watch",
     "build:prod": "npm run clean && tsc",
     "clean": "rimraf build",
-    "prepublishOnly": "npm run build:prod"
+    "prepublishOnly": "npm run build:prod",
+    "test": "mocha -r ts-node/register tests/**/*.ts --timeout 5000"
   },
   "devDependencies": {},
   "peerDependencies": {}
