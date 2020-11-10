@@ -19,7 +19,7 @@ However, if that's not sufficient, you can use [rpc-core](packages/rpc-core) to 
 
 Here's how to communicate with the main process from renderer using [rpc-electron](packages/rpc-electron):
 
-- Install `npm install --save @wexond/rpc-electron`
+- Install `npm install --save @wexond/rpc-electron @wexond/rpc-core`
 - Create a file that is imported in both main and renderer processes, for example `ping-pong.ts`:
 
 ```ts
