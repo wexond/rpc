@@ -1,12 +1,15 @@
 import {
+  OptionalPromiseScaffold,
+  PromiseScaffold,
   RpcEventBase,
   RpcHandler,
   RpcObserver,
   RpcScaffold,
+  SyncScaffold,
 } from '@wexond/rpc-core';
 
 export type RpcWorkerHandler<T extends RpcScaffold<T>> = RpcHandler<
-  T,
+  OptionalPromiseScaffold<T>,
   RpcWorkerEvent
 >;
 

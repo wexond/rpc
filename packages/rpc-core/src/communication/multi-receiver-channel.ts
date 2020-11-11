@@ -1,4 +1,4 @@
-import { RpcScaffold } from '..';
+import { PromiseScaffold, RpcScaffold } from '..';
 import { Channel } from './channel';
 
 export abstract class MultiReceiverChannel<
@@ -12,7 +12,7 @@ export abstract class MultiReceiverChannel<
     return this.receivers.get(args);
   }
 
-  public getInvoker(...args: any[]): T {
+  public getInvoker(...args: any[]): PromiseScaffold<T> {
     return this.createInvoker(...args);
   }
 

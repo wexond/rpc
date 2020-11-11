@@ -20,7 +20,7 @@ export abstract class SingleReceiverChannel<
   public getInvoker(...args: any[]): T {
     if (this.isReceiver() && process?.env?.TEST !== 'true')
       throw new Error('This context cannot invoke remote methods.');
-    return this.createInvoker(...args);
+    return this.createInvoker(...args) as T;
   }
 
   public abstract isReceiver(): boolean;

@@ -1,3 +1,4 @@
+import { OptionalPromise, UnwrapPromise } from './promise';
 import { AnyFunction } from './utils';
 
 export type RpcScaffold<T> = {
@@ -35,3 +36,21 @@ export interface ServiceCaller {
   cb: (obj: any) => Promise<any>;
   method: string;
 }
+
+export type OptionalPromiseScaffold<T extends RpcScaffold<T>> = {
+  [K in keyof T]: (
+    ...args: Parameters<T[K]>
+  ) => OptionalPromise<UnwrapPromise<ReturnType<T[K]>>>;
+};
+
+export type PromiseScaffold<T extends RpcScaffold<T>> = {
+  [K in keyof T]: (
+    ...args: Parameters<T[K]>
+  ) => Promise<UnwrapPromise<ReturnType<T[K]>>>;
+};
+
+export type SyncScaffold<T extends RpcScaffold<T>> = {
+  [K in keyof T]: (
+    ...args: Parameters<T[K]>
+  ) => UnwrapPromise<ReturnType<T[K]>>;
+};
