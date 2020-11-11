@@ -1,6 +1,6 @@
 {
   "name": "@wexond/rpc-electron",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Type-safe inter-process communication for Electron",
   "keywords": [
     "electron",
@@ -28,12 +28,12 @@
     "test": "mocha -r ts-node/register tests/**/*.ts --timeout 5000"
   },
   "devDependencies": {
-    "@wexond/rpc-core": "^1.0.0",
+    "@wexond/rpc-core": "^1.0.2",
     "electron": "^10.1.5"
   },
   "dependencies": {},
   "peerDependencies": {
-    "@wexond/rpc-core": "^1.0.0",
+    "@wexond/rpc-core": "^1.0.2",
     "electron": "^10.1.5"
   }
 }
