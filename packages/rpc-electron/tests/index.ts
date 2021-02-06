@@ -213,7 +213,7 @@ describe('Electron RPC', () => {
       ).to.be.equal(4);
     });
 
-    it('should trigger all observers', () => {
+    it('should trigger all observers', (): Promise<void> => {
       return new Promise(async (resolve) => {
         const channel = new MainToRendererChannel<TestService>('test');
         const receiver = channel.getReceiver();

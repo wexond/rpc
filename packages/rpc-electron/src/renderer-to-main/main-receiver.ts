@@ -15,9 +15,10 @@ export class MainReceiver<T extends RpcScaffold<T>> extends Receiver<
   constructor(name: string) {
     super(name);
     
-    if (checkIpcContext() === 'renderer') return;
+    checkIpcContext();
 
     const ipcMain = getIpcMain();
+    if (!ipcMain) return;
 
     // Prevent EventEmitter leaks.
     clearEvents(ipcMain, this.name);

@@ -10,10 +10,10 @@ export class RendererReceiver<T extends RpcScaffold<T>> extends Receiver<
   constructor(name: string) {
     super(name);
 
-    // Don't throw no ipcRenderer error if there's ipcMain available.
-    if (checkIpcContext() === 'main') return;
+    checkIpcContext();
 
     const ipcRenderer = getIpcRenderer();
+    if (!ipcRenderer) return;
 
     // Prevent EventEmitter leaks.
     clearEvents(ipcRenderer, this.name);
