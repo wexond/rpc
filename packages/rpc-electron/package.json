@@ -28,7 +28,7 @@
     "test": "mocha -r ts-node/register tests/**/*.ts --timeout 5000"
   },
   "devDependencies": {
-    "@wexond/rpc-core": "^1.0.2",
+    "@wexond/rpc-core": "^1.0.3",
     "electron": "^10.1.5"
   },
   "peerDependencies": {

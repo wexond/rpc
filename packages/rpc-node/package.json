@@ -19,7 +19,7 @@
     "prepublishOnly": "npm run build:prod"
   },
   "devDependencies": {
-    "@wexond/rpc-core": "^1.0.2"
+    "@wexond/rpc-core": "^1.0.3"
   },
   "peerDependencies": {
     "@wexond/rpc-core": "^1.0.2"
