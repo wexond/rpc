@@ -4,20 +4,19 @@ import {
   createServiceProxy,
   makeRandomId,
   RpcScaffold,
-  PromiseScaffold,
 } from '@wexond/rpc-core';
 import { WorkerReceiver } from './worker-receiver';
 import { RpcWorkerRequest, RpcWorkerResponse } from '../interfaces';
 
 export declare interface WorkerChannel<T> {
   getReceiver(port?: MessagePort | Worker): WorkerReceiver<T>;
-  getInvoker(port?: MessagePort | Worker): PromiseScaffold<T>;
+  getInvoker(port?: MessagePort | Worker): T;
 }
 export class WorkerChannel<
   T extends RpcScaffold<T>
 > extends MultiReceiverChannel<T> {
-  protected createInvoker(port?: MessagePort | Worker) {
-    if (!port && !parentPort) throw new Error('Invalid MessagePort.');
+  protected createInvoker(port: MessagePort | Worker): T {
+    if (!port) throw new Error('Invalid MessagePort.');
 
     return createServiceProxy<T>((method, ...args: any[]) => {
       return new Promise((resolve, reject) => {
@@ -43,7 +42,7 @@ export class WorkerChannel<
     });
   }
 
-  protected createReceiver(port?: MessagePort | Worker): WorkerReceiver<T> {
+  protected createReceiver(port: MessagePort | Worker): WorkerReceiver<T> {
     if (!port && !parentPort) throw new Error('Invalid MessagePort.');
     return new WorkerReceiver<T>(this.name, port ?? parentPort);
   }

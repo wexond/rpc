@@ -1,7 +1,7 @@
 import { Receiver, RpcScaffold, clearEvents } from '@wexond/rpc-core';
 
 import { RpcRendererHandler, RpcRendererObserver } from '../interfaces';
-import { cacheIpcPossiblyInvalid, getIpcRenderer } from '../utils';
+import { checkIpcContext, getIpcRenderer } from '../utils';
 
 export class RendererReceiver<T extends RpcScaffold<T>> extends Receiver<
   RpcRendererHandler<T>,
@@ -11,7 +11,7 @@ export class RendererReceiver<T extends RpcScaffold<T>> extends Receiver<
     super(name);
 
     // Don't throw no ipcRenderer error if there's ipcMain available.
-    if (cacheIpcPossiblyInvalid('ipcMain') && process?.env?.TEST !== 'true') return;
+    if (checkIpcContext() === 'main') return;
 
     const ipcRenderer = getIpcRenderer();
 

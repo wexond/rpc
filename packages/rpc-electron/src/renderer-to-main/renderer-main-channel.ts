@@ -5,7 +5,7 @@ import {
 } from '@wexond/rpc-core';
 
 import { MainReceiver } from './main-receiver';
-import { cacheIpcPossiblyInvalid, getIpcRenderer } from '../utils';
+import { checkIpcContext, getIpcRenderer } from '../utils';
 
 export declare interface RendererToMainChannel<T> {
   getReceiver(): MainReceiver<T>;
@@ -20,7 +20,7 @@ export class RendererToMainChannel<
   }
 
   public isReceiver() {
-    return cacheIpcPossiblyInvalid('ipcMain') != null;
+    return checkIpcContext() === 'main';
   }
 
   protected createInvoker(): T {

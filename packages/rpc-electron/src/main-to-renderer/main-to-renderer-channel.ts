@@ -6,7 +6,7 @@ import {
 } from '@wexond/rpc-core';
 
 import { RendererReceiver } from './renderer-receiver';
-import { cacheIpcPossiblyInvalid, getIpcMain } from '../utils';
+import { checkIpcContext, getIpcMain } from '../utils';
 
 export declare interface MainToRendererChannel<T> {
   getReceiver(): RendererReceiver<T>;
@@ -17,7 +17,7 @@ export class MainToRendererChannel<
   T extends RpcScaffold<T>
 > extends SingleReceiverChannel<T> {
   public isReceiver() {
-    return cacheIpcPossiblyInvalid('ipcRenderer') != null;
+    return checkIpcContext() === 'renderer';
   }
 
   protected createInvoker(webContents: Electron.WebContents): T {

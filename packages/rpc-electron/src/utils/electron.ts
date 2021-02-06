@@ -1,36 +1,24 @@
-let ipcCache: {
-  ipcRenderer?: Electron.IpcRenderer;
-  ipcMain?: Electron.IpcMain;
-} = {};
+let cachedIpcRenderer: Electron.IpcRenderer | undefined;
+let cachedIpcMain: Electron.IpcMain | undefined;
 
-export const cacheIpcPossiblyInvalid = (
-  key: 'ipcRenderer' | 'ipcMain',
-  val?: any,
-): any => {
-  if (!ipcCache[key]) ipcCache[key] = val ? val : require?.('electron')?.[key];
-  return ipcCache[key];
+export const checkIpcContext = (): 'main' | 'renderer' => {
+  if (cachedIpcRenderer) return 'renderer';
+  if (cachedIpcMain) return 'main';
+  throw new Error('Neither ipcMain nor ipcRenderer has been set.');
+}
+
+export const getIpcRenderer = (): Electron.IpcRenderer | undefined => {
+  return cachedIpcRenderer;
 };
 
-const cacheIpc = (key: 'ipcRenderer' | 'ipcMain', val?: any): any => {
-  const ipc = cacheIpcPossiblyInvalid(key, val);
-  if (!ipc) {
-    throw Error(`${key} not found.`);
-  }
-  return ipc;
-};
-
-export const getIpcRenderer = (): Electron.IpcRenderer => {
-  return cacheIpc('ipcRenderer');
-};
-
-export const getIpcMain = (): Electron.IpcMain => {
-  return cacheIpc('ipcMain');
+export const getIpcMain = (): Electron.IpcMain | undefined => {
+  return cachedIpcMain;
 };
 
 export const setIpcRenderer = (ipcRenderer: Electron.IpcRenderer) => {
-  cacheIpc('ipcRenderer', ipcRenderer);
+  cachedIpcRenderer = ipcRenderer;
 };
 
 export const setIpcMain = (ipcMain: Electron.IpcMain) => {
-  cacheIpc('ipcMain', ipcMain);
+  cachedIpcMain = ipcMain;
 };
