@@ -21,6 +21,7 @@ export type RpcWorkerObserver<T extends RpcScaffold<T>> = RpcObserver<
 export type RpcWorkerEvent = RpcEventBase;
 
 export interface RpcWorkerRequest {
+  name: string;
   id: string;
   method: string;
   args: any[];

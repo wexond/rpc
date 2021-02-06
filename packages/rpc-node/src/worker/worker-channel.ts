@@ -22,6 +22,7 @@ export class WorkerChannel<
     return createServiceProxy<T>((method, ...args: any[]) => {
       return new Promise((resolve, reject) => {
         const req: RpcWorkerRequest = {
+          name: this.name,
           id: makeRandomId(),
           method,
           args,
